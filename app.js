@@ -1,6 +1,9 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
+
+const connectDb = require('./dbConfig');
+
 const PORT = 3000;
 
 
@@ -36,7 +39,8 @@ app.get('/api/estudiantes/:id', (req, res) => {
     res.json(ESTUDIANTES[req.params.id]);
 });
 
-
-app.listen(PORT, () => {
-    console.log(`Ejecutando en el puerto ${PORT}`);
+connectDb().then(() => {
+    app.listen(PORT, () => {
+      console.log(`Ejecutando en el puerto ${PORT}`);
+    });
 });
