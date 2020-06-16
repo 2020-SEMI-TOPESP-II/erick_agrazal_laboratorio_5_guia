@@ -1,22 +1,12 @@
+require('dotenv').config()
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
 
 const connectDb = require('./dbConfig');
+const Estudiantes = require('./models/Estudiantes');
 
 const PORT = 3000;
-
-
-const ESTUDIANTES = [
-    {
-        nombre: "Erick Agrazal",
-        edad: 29,
-    },
-    {
-        nombre: "Zianni Pitti",
-        edad: 22
-    }
-];
 
 
 // Intermediarios
@@ -24,19 +14,26 @@ app.use(bodyParser.json());
 
 
 // Controladores
-app.get('/api/estudiantes/', (req, res) => {
+app.get('/api/estudiantes/', async (req, res) => {
+    const estudiantes = await Estudiantes.find().select('nombre edad');
     res.json({
-        estudiantes: ESTUDIANTES,
-        cantidad: ESTUDIANTES.length
+        estudiantes,
+        cantidad: estudiantes.length
     });
 });
-app.post('/api/estudiantes/', (req, res) => {
+app.post('/api/estudiantes/', async (req, res) => {
     const { nombre, edad } = req.body;
-    ESTUDIANTES.push({ nombre, edad });
+    await Estudiantes.create({ nombre, edad });
     res.json({ nombre, edad });
 });
-app.get('/api/estudiantes/:id', (req, res) => {
-    res.json(ESTUDIANTES[req.params.id]);
+app.get('/api/estudiantes/:id', async (req, res) => {
+    try {
+        const estudiante = await Estudiantes.findById(req.params.id).select('nombre edad');
+        res.json(estudiante);
+    } catch (error) {
+        console.log(error);
+        res.json({});
+    }
 });
 
 connectDb().then(() => {
