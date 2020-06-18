@@ -2,6 +2,7 @@ require('dotenv').config()
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
+const cors = require('cors')
 
 const connectDb = require('./dbConfig');
 const Estudiantes = require('./models/Estudiantes');
@@ -11,6 +12,7 @@ const PORT = 3000;
 
 // Intermediarios
 app.use(bodyParser.json());
+app.use(cors());
 
 
 // Controladores
@@ -23,6 +25,7 @@ app.get('/api/estudiantes/', async (req, res) => {
 });
 app.post('/api/estudiantes/', async (req, res) => {
     const { nombre, edad } = req.body;
+    console.log('Req: ', req.body);
     await Estudiantes.create({ nombre, edad });
     res.json({ nombre, edad });
 });
