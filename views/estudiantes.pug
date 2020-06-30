@@ -34,10 +34,10 @@ html(lang="en")
             (() => {
                 const eliminarEstudianteBtn = document.getElementsByClassName('js-eliminar-estudiante');
                 for(let anchorTag of eliminarEstudianteBtn){
-                    anchorTag.addEventListener('click', async (e) => {
-                        e.preventDefault();
+                    anchorTag.addEventListener('click', async (clickEvent) => {
+                        // clickEvent.preventDefault();
                         try {
-                            const id = e.target.getAttribute('data-id');
+                            const id = clickEvent.target.getAttribute('data-id');
                             await fetch(`/api/estudiantes/${id}`, {
                                 method: 'DELETE',
                             });
