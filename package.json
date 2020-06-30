@@ -7,7 +7,8 @@
         "test": "echo \"Error: no test specified\" && exit 1",
         "mongo:start": "docker run --rm -p=27017:27017 --env-file=./.env --name=topespii--lab5--mongo -d centos/mongodb-32-centos7",
         "mongo:stop": "docker stop topespii--lab5--mongo",
-        "start": "nodemon app.js"
+        "start": "node app.js",
+        "dev": "npm run mongo:start && nodemon app.js"
     },
     "repository": {
         "type": "git",
@@ -25,6 +26,7 @@
         "dotenv": "^8.2.0",
         "express": "^4.17.1",
         "mongoose": "^5.9.18",
-        "nodemon": "^2.0.4"
+        "nodemon": "^2.0.4",
+        "pug": "^3.0.0"
     }
 }

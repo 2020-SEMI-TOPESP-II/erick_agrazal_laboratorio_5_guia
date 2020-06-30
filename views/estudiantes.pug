@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title Document
+    body
+        h1 Estudiantes
+        if success
+            h2 El usuario ha sido agregado con éxito.
+        form(action="/estudiantes", method="post")
+            label Nombre:
+            input#create-estudiante-nombre(name="nombre", type="text")
+            br
+            label Edad: 
+            input#create-estudiante-edad(name="edad", type="text")
+            br
+            button#create-estudiante-btn(type="submit") Guardar
+        br
+        table
+            thead
+                th Nombre
+                th Edad
+                th Eliminar
+            tbody
+                each estudiante in estudiantes
+                    tr
+                        td
+                            a(href="/estudiantes/" + estudiante._id) #{estudiante.nombre}
+                        td #{estudiante.edad}
+                        td
+                            a.js-eliminar-estudiante(href="#", data-id=estudiante._id) Eliminar
+        script.
+            (() => {
+                const eliminarEstudianteBtn = document.getElementsByClassName('js-eliminar-estudiante');
+                for(let anchorTag of eliminarEstudianteBtn){
+                    anchorTag.addEventListener('click', async (e) => {
+                        e.preventDefault();
+                        try {
+                            const id = e.target.getAttribute('data-id');
+                            await fetch(`/api/estudiantes/${id}`, {
+                                method: 'DELETE',
+                            });
+                            location.reload();
+                        } catch(error) {
+                            console.log('Error: ', error);
+                        }
+                    });
+                }
+            })();
